@@ -43,24 +43,23 @@ namespace Contato.Atualizar
                     while (!stoppingToken.IsCancellationRequested)
                     {
                         var consumer = new AsyncEventingBasicConsumer(channel);
-                        consumer.ReceivedAsync += (modal, resp) =>
+                        consumer.ReceivedAsync += async (modal, resp) =>
                         {
                             byte[] body = resp.Body.ToArray();
                             var message = Encoding.UTF8.GetString(body);
 
                             if (string.IsNullOrEmpty(message))
-                                return Task.CompletedTask;
+                                await Task.CompletedTask;
 
                             var contato = JsonConvert.DeserializeObject<DadosContato>(message);
 
                             if (contato != null)
                             {
                                 Console.WriteLine($"ENVIANDO REGISTRO: {contato.Guid}  DE NOME: {contato.Nome} PARA ATUALIZAÇÃO!");
-                                contato.Guid = Guid.NewGuid().ToString();
                                 _contatoComandos.Atualizar(contato!);
                             }
 
-                            return Task.CompletedTask;
+                           await Task.CompletedTask;
                         };
 
                         await channel.BasicConsumeAsync(_nomeFila, autoAck: true, consumer: consumer);
@@ -73,5 +72,6 @@ namespace Contato.Atualizar
                 Console.WriteLine(ex.ToString() );
             }
         }
+
     }
 }

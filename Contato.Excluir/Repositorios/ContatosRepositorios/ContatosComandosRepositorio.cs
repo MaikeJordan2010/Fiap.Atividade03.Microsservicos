@@ -1,5 +1,6 @@
 ﻿using Contato.Excluir.Dominio;
 using Contato.Excluir.Repositorios.Context;
+using Dapper;
 using Dapper.Contrib.Extensions;
 using Microsoft.Data.SqlClient;
 
@@ -20,8 +21,8 @@ namespace Contato.Excluir.Repositorios.ContatosRepositorios
             {
                 if (_connection != null)
                 {
-                    await _connection.OpenAsync();
-                    _connection.Delete<DadosContato>(contato);
+                    _connection.Open();
+                    await _connection.DeleteAsync<DadosContato>(contato);
                 }
             }
             catch (Exception ex)

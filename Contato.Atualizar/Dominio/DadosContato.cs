@@ -1,12 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Dapper.Contrib.Extensions;
 
 namespace Contato.Atualizar.Dominio
 {
     [Table("TabContatos")]
     public class DadosContato
     {
-        [Key]
+        [ExplicitKey]
         public string? Guid { get; set; }
         public string? Nome { get; set; }
         public string? Email { get; set; }
